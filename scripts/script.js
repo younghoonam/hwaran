@@ -446,7 +446,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.outerWidth, window.outerHeight);
 
 //HDR
-const hdrUrl = "../images/studio_small_09_1k.hdr";
+const hdrUrl = "./images/studio_small_09_1k.hdr";
 new RGBELoader().load(hdrUrl, (texture) => {
   const gen = new THREE.PMREMGenerator(renderer);
   const envMap = gen.fromEquirectangular(texture).texture;
@@ -571,7 +571,7 @@ loader.setDRACOLoader(dracoLoader);
 // Load a glTF resource
 loader.load(
   // resource URL
-  "../models/scene.glb",
+  "./models/scene.glb",
   // called when the resource is loaded
   function (gltf) {
     initModel(gltf);

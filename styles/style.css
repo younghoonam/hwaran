@@ -110,22 +110,28 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: linear-gradient(to bottom left, #b83732, #1e0705);
+  background: rgb(33, 35, 32);
+  background: linear-gradient(
+    21deg,
+    rgb(17, 17, 16) 35%,
+    rgba(71, 75, 53, 1) 100%
+  );
   z-index: -99;
 
   opacity: 0;
   transition: 0.5s;
 }
 .main-page > * {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .main-text-wrapper {
-  margin-inline: auto;
+  /* margin-inline: auto; */
+  margin-left: clamp(1rem, 3vw, 3rem);
 }
 
 .main-page {
-  padding-top: 3rem;
+  padding-top: 10%;
 }
 .main-subtitle {
   text-transform: uppercase;
@@ -134,7 +140,7 @@ main {
 
 .main-title {
   text-transform: uppercase;
-  font-size: clamp(3rem, 6vw, 8rem);
+  font-size: clamp(3rem, 10vw, 4rem);
   font-weight: 900;
   line-height: 90%;
   margin-top: 0.5rem;
@@ -146,8 +152,8 @@ main {
 }
 
 .main-description {
-  max-width: 40rem;
-  margin-inline: auto;
+  max-width: 20rem;
+  /* margin-inline: auto; */
 
   font-size: medium;
   font-weight: 300;
@@ -201,10 +207,6 @@ main {
 
 .spec-name {
   text-transform: uppercase;
-}
-
-.spec-max {
-  /* color: #74cae8; */
 }
 
 /* BUTTON INSTRUCTION */
@@ -279,6 +281,8 @@ main {
 
 /* PROGRESS BAR */
 .scroll-watcher {
+  display: none;
+
   --height: 0.2rem;
   position: fixed;
   transform: translateX(-50%);
@@ -365,6 +369,58 @@ main {
   background-color: #c6d8d5;
 }
 
+#call-to-action-page {
+  height: 500vh;
+
+  display: flex;
+}
+
+.call-to-action-wrapper {
+  align-self: flex-end;
+
+  display: flex;
+  flex-direction: column;
+
+  transform: translateY(-40vh);
+  margin-left: clamp(1rem, 3vw, 3rem);
+}
+
+.call-to-action-title {
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.call-to-action-description {
+  margin-bottom: 2rem;
+}
+
+.call-to-action-button {
+  --height: 2.5rem;
+  width: calc(var(--height) * 3.5);
+  height: var(--height);
+  border-radius: calc(var(--height) / 2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Inter";
+  font-size: 1rem;
+  font-weight: 900;
+  color: #161617;
+  text-decoration: none;
+
+  background-color: #f5f5f7;
+  border: none;
+}
+
+.call-to-action-button:hover {
+  background-color: #dfdfdf;
+}
+
 .posrot {
   display: none;
   position: fixed;
@@ -379,9 +435,6 @@ main {
   bottom: 3rem;
 }
 
-#last-divider {
-  height: 100vh;
-}
 footer {
   display: flex;
 

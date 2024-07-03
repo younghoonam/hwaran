@@ -113,7 +113,8 @@ const scrollInfo = {
     if (this.currentSection >= sectionElements.length - 1) {
       nextSectionStart =
         sectionElements[this.currentSection].offsetTop +
-        sectionElements[this.currentSection].offsetHeight;
+        sectionElements[this.currentSection].offsetHeight -
+        window.innerHeight;
     } else {
       nextSectionStart = sectionElements[this.currentSection + 1].offsetTop;
     }
@@ -134,13 +135,15 @@ const transformSplines = [
   //To lighting mode section
   {
     position: new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.172, -0.328, -0.129),
+      // new THREE.Vector3(-0.172, -0.328, -0.129),
+      new THREE.Vector3(0.33, 0.28, -0.11),
       new THREE.Vector3(-0.23, 0.39, 0.28),
       new THREE.Vector3(-0.41, -0.08, 0.1),
       //new THREE.Vector3(-0.41, -0.08, 0.1)
     ]),
     rotation: new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-1.194, 0.267, 0.178),
+      // new THREE.Vector3(-1.194, 0.267, 0.178),
+      new THREE.Vector3(-1.19, 0.19, -0.01),
       new THREE.Vector3(-1.0, -0.19, -0.51),
       new THREE.Vector3(-0.27, 1.31, 0.24),
       // new THREE.Vector3(-0.27, 1.31, 0.24)
@@ -265,11 +268,14 @@ const transformSplines = [
   {
     position: new THREE.CatmullRomCurve3([
       new THREE.Vector3(-0.51, -0.28, -0.44),
-      new THREE.Vector3(-0.51, 0.39, -0.44),
+      new THREE.Vector3(1, 0.54, -0.1),
+      new THREE.Vector3(-0.872, -0.328, -0.129),
+      new THREE.Vector3(0.6, 0.58, 0.36),
     ]),
     rotation: new THREE.CatmullRomCurve3([
       new THREE.Vector3(-1.06, 0.39, 1.45),
-      new THREE.Vector3(0.78, 0.91, -1.82),
+      new THREE.Vector3(-1.194, 0.267 - 2 * Math.PI, 0.178 - 2 * Math.PI),
+      new THREE.Vector3(-0.47, 0.27 - 2 * Math.PI, -0.13 - 2 * Math.PI),
     ]),
   },
 ];
@@ -408,12 +414,15 @@ const transformSplinesMobile = [
   },
   {
     position: new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-2.19, -1.707, -2.121),
-      new THREE.Vector3(-0.51, 0.69, -0.44),
+      new THREE.Vector3(-0.51, -0.28, -0.44),
+      new THREE.Vector3(1, 0.54, -0.1),
+      new THREE.Vector3(-0.872, -0.328, -0.129),
+      new THREE.Vector3(0.6, 0.58, 0.36),
     ]),
     rotation: new THREE.CatmullRomCurve3([
       new THREE.Vector3(-1.06, 0.39, 1.45),
-      new THREE.Vector3(0.78, 0.91, -1.82),
+      new THREE.Vector3(-1.194, 0.267 - 2 * Math.PI, 0.178 - 2 * Math.PI),
+      new THREE.Vector3(-0.47, 0.27 - 2 * Math.PI, -0.13 - 2 * Math.PI),
     ]),
   },
 ];
@@ -469,6 +478,10 @@ camera.fov = 20;
 camera.updateProjectionMatrix();
 orbit.update();
 orbit.saveState();
+
+// Axes Helper
+const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 // Materials
 const coverMaterial = new THREE.MeshPhysicalMaterial({
@@ -1144,7 +1157,7 @@ addEventListener("scroll", (event) => {
 function render() {
   renderer.render(scene, camera);
 }
-let transfromModel = true;
+let transformModel = true;
 const pos = document.querySelector("#pos");
 pos.copyPos = function () {
   const pos = `new THREE.Vector3(${headLamp.position.x.toFixed(
@@ -1166,7 +1179,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   if (isModelLoaded) {
-    if (transfromModel) {
+    if (transformModel) {
       updateModelTransfrom();
     }
 
@@ -1543,20 +1556,25 @@ function getScrollPercentage(rounded = false) {
 gui.add(camera, "fov", 1, 200, 1).onChange(() => {
   camera.updateProjectionMatrix();
 });
-const _canvas = {
+const canvasControls = {
   element: canvas,
+  isControlling: false,
   toggle: function () {
-    transfromModel = !transfromModel;
-    if (this.element.style.zIndex != -9) {
-      this.element.style.zIndex = -9;
-    } else {
+    this.isControlling = !this.isControlling;
+    if (this.isControlling) {
+      transformModel = false;
       this.element.style.zIndex = 2;
+      control.attach(headLamp);
+    } else {
+      transformModel = true;
+      this.element.style.zIndex = -9;
+      control.detach(headLamp);
     }
   },
 };
 
 gui.add(orbit, "reset");
-gui.add(_canvas, "toggle");
+gui.add(canvasControls, "toggle");
 
 const scrollFolder = gui.addFolder("Scroll");
 scrollFolder.add(scrollInfo, "totalProgress").listen();
@@ -1614,7 +1632,7 @@ window.addEventListener("keydown", function (event) {
       control.setMode("rotate");
       break;
     case "q":
-      _canvas.toggle();
+      canvasControls.toggle();
       break;
   }
 });
@@ -1625,7 +1643,7 @@ let targetPosition = new THREE.Vector3();
 let targetRotation = new THREE.Euler();
 function updateModelTransfrom() {
   const transformSection = scrollInfo.currentSection;
-  const transformProgress = scrollInfo.sectionProgress;
+  const transformProgress = Math.min(1, scrollInfo.sectionProgress);
 
   if (isDesktop) {
     targetPosition.copy(

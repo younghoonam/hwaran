@@ -1,12 +1,12 @@
 {
-  "name": "terralumi",
+  "name": "hwaran",
   "version": "1.0.0",
-  "homepage": "https://terralumi.younghoonam.com",
+  "homepage": "https://hwaran.younghoonam.com",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
     "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d dist --cname terralumi.younghoonam.com",
+    "deploy" : "gh-pages -d dist --cname hwaran.younghoonam.com",
     "build": "vite build",
     "preview": "vite preview"
   },
